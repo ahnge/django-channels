@@ -1,0 +1,29 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="{% static "css/index.css" %}">
+        <meta name="description" content="Tic Tac Toe with django channels">
+        <meta name="keywords" content="Tic-tac-toe, django-channelse, multipler tictactoe with django channels">
+        <title>Channels</title>
+    </head>
+    <body>
+        {% if messages %}
+            <ul class="messages">
+                {% for message in messages %}
+                    <div {% if message.tags %}class="msg {{ message.tags }}"{% endif %}>
+                        {{ message }}
+                        <span class="close-msg">X</span>
+                    </div>
+                {% endfor %}
+            </ul>
+        {% endif %}
+        {% block content %}
+        {% endblock content %}
+        {% block script %}
+        {% endblock script %}
+        <script defer src="{% static "js/base.js" %}"></script>
+    </body>
+</html>

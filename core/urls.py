@@ -16,8 +16,15 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from django.views.generic.base import TemplateView
+
+
+class HomeView(TemplateView):
+    template_name = "home.html"
+
 
 urlpatterns = [
-    path("chat/", include("chat.urls")),
+    path("", HomeView.as_view()),
+    path("tictactoe/", include("tictactoe.urls")),
     path("admin/", admin.site.urls),
 ]
