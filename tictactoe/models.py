@@ -18,8 +18,10 @@ class GameRoom(models.Model):
     def add_user(self, user):
         if self.user1 is None:
             self.user1 = user
+            return "X"
         elif self.user2 is None:
             self.user2 = user
+            return "O"
         else:
             raise Exception("Room is full")
 

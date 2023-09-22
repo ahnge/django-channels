@@ -21,7 +21,11 @@
             <div>
                 <h1>Game Room List</h1>
                 <ul>
-                    {% for game_room in game_rooms %}<li>{{game_room.room_name}}</li>{% endfor %}
+                    {% for game_room in game_rooms %}
+                        <li>
+                            <a href="{% url "ttt:game_room" game_room.room_name %}">{{ game_room.room_name }}</a>
+                        </li>
+                    {% endfor %}
                 </ul>
             </div>
         {% endif %}

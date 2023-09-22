@@ -10,5 +10,5 @@ urlpatterns = [
     path("logout", views.logout_view, name="logout"),
     path("register", views.register_view, name="register"),
     path("create-game", views.create_game, name="create_game"),
-    path("<int:room_id>/", views.game_room, name="game_room"),
+    path("<str:room_name>/", views.game_room, name="game_room"),
 ]

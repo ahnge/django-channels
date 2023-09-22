@@ -62,12 +62,24 @@ def index(request):
 
 
 @login_required
-def game_room(request, room_id):
-    game_room = GameRoom.objects.get(pk=room_id)
-    game_room.add_user(request.user)
+def game_room(request, room_name):
+    game_room = GameRoom.objects.get(room_name=room_name)
+    # If the user has already joined the room, reconnect
+    if game_room.user1 == request.user:
+        context = {"game_room": game_room, "char_choice": "X"}
+        return render(request, "tictactoe/game_room.html", context)
+    elif game_room.user2 == request.user:
+        context = {"game_room": game_room, "char_choice": "O"}
+        return render(request, "tictactoe/game_room.html", context)
+    # Ensure the room is not full
+    if game_room.is_full():
+        messages.error(request, "Oops! The room is full.")
+        return redirect("ttt:index")
+    # User is new
+    char_choice = game_room.add_user(request.user)
     game_room.save()
 
-    context = {"game_room": game_room}
+    context = {"game_room": game_room, "char_choice": char_choice}
     return render(request, "tictactoe/game_room.html", context)
 
 
@@ -86,12 +98,12 @@ def create_game(request):
                 messages.error(request, "The room with that name already exists.")
                 return redirect("ttt:index")
             # Ensure room name is not empty
-            if len(int(room_name)) == 0:
+            if not len(room_name) > 0:
                 messages.error(request, "You need to provide the room name.")
                 return redirect("ttt:index")
             else:
                 # Create a new room
                 room = GameRoom(room_name=room_name)
                 room.save()
-            return redirect("ttt:game_room", room_id=room.id)
+            return redirect("ttt:game_room", room_name=room_name)
     return redirect("ttt:index")
