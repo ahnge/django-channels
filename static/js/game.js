@@ -1,3 +1,4 @@
+var players = document.querySelector(".players");
 var roomCode = document.getElementById("game_board").getAttribute("room_code");
 var char_choice = document
   .getElementById("game_board")
@@ -19,15 +20,18 @@ winIndices = [
 ];
 let moveCount = 0;
 let myturn = true;
+let gameStarted = false;
 
 let elementArray = document.getElementsByClassName("square");
 for (var i = 0; i < elementArray.length; i++) {
   elementArray[i].addEventListener("click", (event) => {
     const index = event.target.dataset.index;
-    console.log(index);
+    console.log(gameStarted);
     if (gameBoard[index] == -1) {
       if (!myturn) {
         alert("Wait for other to place the move");
+      } else if (!gameStarted) {
+        alert("Wait for other player to join.");
       } else {
         myturn = false;
         document.getElementById("alert_move").style.display = "none"; // Hide
@@ -115,8 +119,8 @@ function connect() {
     console.log("WebSockets connection created.");
     gameSocket.send(
       JSON.stringify({
-        event: "START",
-        message: "",
+        event: "JOIN",
+        message: { user },
       })
     );
   };
@@ -139,9 +143,23 @@ function connect() {
     switch (event) {
       case "START":
         reset();
+        gameStarted = true;
+        break;
+      case "JOIN":
+        console.log(message.game_can_start);
+        if (message.game_can_start) {
+          gameSocket.send(
+            JSON.stringify({
+              event: "START",
+              message: "",
+            })
+          );
+        }
+        players.innerHTML += `<h5>${message.user}</h5>`;
         break;
       case "END":
         alert(message);
+        gameStarted = false;
         reset();
         break;
       case "MOVE":

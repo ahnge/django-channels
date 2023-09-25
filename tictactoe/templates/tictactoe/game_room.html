@@ -6,6 +6,9 @@
             <div class="head">
                 <h1>TIC TAC TOE</h1>
                 <h3>Welcome to room: {{ game_room.room_name }}</h3>
+                <div class="players">
+                    {% if game_room.user1 %}<h5>{{game_room.user1}}</h5>{% endif %}
+                </div>
             </div>
             <div id="game_board" room_code={{ game_room.room_name }} char_choice={{ char_choice }}>
                 <div class="square" data-index='0'></div>
@@ -25,5 +28,6 @@
     </div>
 {% endblock content %}
 {% block script %}
+    <script>var user = "{{request.user}}";</script>
     <script defer src="{% static "js/game.js" %}"></script>
 {% endblock script %}

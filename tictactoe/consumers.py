@@ -6,6 +6,7 @@ class TicTacToeConsumer(AsyncJsonWebsocketConsumer):
     async def connect(self):
         self.room_name = self.scope["url_route"]["kwargs"]["room_code"]
         self.room_group_name = "room_%s" % self.room_name
+        self.users_in_room = []
 
         # Join room group
         await self.channel_layer.group_add(self.room_group_name, self.channel_name)
@@ -31,6 +32,23 @@ class TicTacToeConsumer(AsyncJsonWebsocketConsumer):
                 {"type": "send_message", "message": message, "event": "MOVE"},
             )
 
+        if event == "JOIN":
+            # Send message to room group
+            self.users_in_room.append(message["user"])
+            print(self.users_in_room)
+            print(len(self.users_in_room))
+            await self.channel_layer.group_send(
+                self.room_group_name,
+                {
+                    "type": "send_message",
+                    "message": {
+                        "game_can_start": len(self.users_in_room) == 2,
+                        "user": message["user"],
+                    },
+                    "event": "JOIN",
+                },
+            )
+
         if event == "START":
             # Send message to room group
             await self.channel_layer.group_send(
@@ -40,6 +58,7 @@ class TicTacToeConsumer(AsyncJsonWebsocketConsumer):
 
         if event == "END":
             # Send message to room group
+            self.users_in_room.clear()
             await self.channel_layer.group_send(
                 self.room_group_name,
                 {"type": "send_message", "message": message, "event": "END"},
