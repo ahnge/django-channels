@@ -1,6 +1,6 @@
 from django.apps import AppConfig
 
 
-class TictactoeConfig(AppConfig):
+class ChatConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
-    name = 'tictactoe'
+    name = 'chat'
