@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "chat.apps.ChatConfig",
+    "tictactoe.apps.TictactoeConfig",
 ]
 
 MIDDLEWARE = [

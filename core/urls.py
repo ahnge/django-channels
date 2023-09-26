@@ -31,5 +31,6 @@ urlpatterns = [
     path("logout/", logout_view, name="logout"),
     path("register/", register_view, name="register"),
     path("chat/", include("chat.urls")),
+    path("ttt/", include("tictactoe.urls")),
     path("admin/", admin.site.urls),
 ]
