@@ -6,11 +6,9 @@
             <div class="head">
                 <h1>TIC TAC TOE</h1>
                 <h3>Welcome to room: {{ game_room.room_name }}</h3>
-                <div class="players">
-                    {% if game_room.user1 %}<h5>{{game_room.user1}}</h5>{% endif %}
-                </div>
+                <div class="players"></div>
             </div>
-            <div id="game_board" room_code={{ game_room.room_name }} char_choice={{ char_choice }}>
+            <div id="game_board" room_name={{ game_room.room_name }}>
                 <div class="square" data-index='0'></div>
                 <div class="square" data-index='1'></div>
                 <div class="square" data-index='2'></div>
@@ -21,13 +19,12 @@
                 <div class="square" data-index='7'></div>
                 <div class="square" data-index='8'></div>
             </div>
-            <div id="alert_move">
-                Your turn. Place your move <strong>{{ char_choice }}</strong>
-            </div>
+            <div id="alert_move"></div>
         </div>
     </div>
+
+    {{ user.username|json_script:"user" }}
 {% endblock content %}
 {% block script %}
-    <script>var user = "{{request.user}}";</script>
     <script defer src="{% static "js/game.js" %}"></script>
 {% endblock script %}

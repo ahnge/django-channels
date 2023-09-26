@@ -1,11 +1,8 @@
 var players = document.querySelector(".players");
-var roomCode = document.getElementById("game_board").getAttribute("room_code");
-var char_choice = document
-  .getElementById("game_board")
-  .getAttribute("char_choice");
-
+var roomName = document.getElementById("game_board").getAttribute("room_name");
+var char_choice = null;
 var connectionString =
-  "ws://" + window.location.host + "/ws/play/" + roomCode + "/";
+  "ws://" + window.location.host + "/ws/play/" + roomName + "/";
 var gameSocket = new WebSocket(connectionString);
 var gameBoard = [-1, -1, -1, -1, -1, -1, -1, -1, -1];
 winIndices = [
@@ -21,6 +18,7 @@ winIndices = [
 let moveCount = 0;
 let myturn = true;
 let gameStarted = false;
+const user = JSON.parse(document.getElementById("user").textContent);
 
 let elementArray = document.getElementsByClassName("square");
 for (var i = 0; i < elementArray.length; i++) {
@@ -114,6 +112,10 @@ function checkWinner() {
   return win;
 }
 
+const addPlayerToPlayerList = (user) => {
+  players.innerHTML += `<h5>${user}</h5>`;
+};
+
 function connect() {
   gameSocket.onopen = function open() {
     console.log("WebSockets connection created.");
@@ -137,16 +139,30 @@ function connect() {
   // Sending the info about the room
   gameSocket.onmessage = function (e) {
     let data = JSON.parse(e.data);
-    data = data["payload"];
-    let message = data["message"];
     let event = data["event"];
+    let message = data["message"];
     switch (event) {
       case "START":
         reset();
         gameStarted = true;
         break;
+      case "userList":
+        players.innerHTML = "";
+        for (let i = 0; i < message.users.length; i++) {
+          addPlayerToPlayerList(message.users[i]);
+        }
+        break;
+      case "userLeave":
+        players.innerHTML = "";
+        for (let i = 0; i < message.users.length; i++) {
+          addPlayerToPlayerList(message.users[i]);
+        }
+        gameStarted = false;
+        break;
+      case "setCharChoice":
+        char_choice = message.char_choice;
+        break;
       case "JOIN":
-        console.log(message.game_can_start);
         if (message.game_can_start) {
           gameSocket.send(
             JSON.stringify({
@@ -155,11 +171,13 @@ function connect() {
             })
           );
         }
-        players.innerHTML += `<h5>${message.user}</h5>`;
+        players.innerHTML = "";
+        for (let i = 0; i < message.users.length; i++) {
+          addPlayerToPlayerList(message.users[i]);
+        }
         break;
       case "END":
         alert(message);
-        gameStarted = false;
         reset();
         break;
       case "MOVE":

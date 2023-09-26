@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load static %}
 {% block content %}
     <div class="container">
         <h1>Welcome {{ user }}</h1>
@@ -10,14 +11,11 @@
         {% endif %}
         {% if user.is_authenticated %}
             <a href="{% url "logout" %}">Logout</a>
-            <form method="post" action="{% url "ttt:create_game" %}">
-                {% csrf_token %}
-                <label>
-                    Game room
-                    <input type="text" name="room_name">
-                </label>
-                <button type="submit">Create game</button>
-            </form>
+            <label>
+                Game room
+                <input type="text" name="room_name" id="roomInput">
+            </label>
+            <button id="roomConnect">Create or Join game</button>
             <div>
                 <h1>Game Room List</h1>
                 <ul>
@@ -31,3 +29,7 @@
         {% endif %}
     </div>
 {% endblock content %}
+
+{% block script %}
+<script src="{% static "js/index.js" %}"></script>
+{% endblock script %}
