@@ -18,6 +18,8 @@ from django.contrib import admin
 from django.urls import path, include
 from django.views.generic.base import TemplateView
 
+from chat.views import login_view, logout_view, register_view
+
 
 class HomeView(TemplateView):
     template_name = "home.html"
@@ -25,6 +27,9 @@ class HomeView(TemplateView):
 
 urlpatterns = [
     path("", HomeView.as_view()),
-    path("tictactoe/", include("tictactoe.urls")),
+    path("login/", login_view, name="login"),
+    path("logout/", logout_view, name="logout"),
+    path("register/", register_view, name="register"),
+    path("chat/", include("chat.urls")),
     path("admin/", admin.site.urls),
 ]
