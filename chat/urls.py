@@ -5,9 +5,6 @@ from . import views
 app_name = "chat"
 
 urlpatterns = [
-    path("login", views.login_view, name="login"),
-    path("logout", views.logout_view, name="logout"),
-    path("register", views.register_view, name="register"),
-    path("", views.index_view, name="chat-index"),
-    path("<str:room_name>/", views.room_view, name="chat-room"),
+    path("", views.index_view, name="index"),
+    path("<str:room_name>/", views.room_view, name="chat_room"),
 ]

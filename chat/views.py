@@ -13,7 +13,7 @@ def register_view(request):
         if form.is_valid():
             user = form.save()
             login(request, user)
-            return redirect("ttt:index")
+            return redirect("chat:index")
         return render(request, "registration/register.html", {"form": form})
     elif request.method == "GET":
         form = CustomUserCreationForm()
@@ -28,7 +28,7 @@ def login_view(request):
 
         if user is not None:
             login(request, user)
-            return redirect("ttt:index")
+            return redirect("chat:index")
         else:
             form = AuthenticationForm(request.POST)
             return render(
@@ -47,7 +47,7 @@ def login_view(request):
 @login_required
 def logout_view(request):
     logout(request)
-    return redirect("ttt:login")
+    return redirect("login")
 
 
 def index_view(request):

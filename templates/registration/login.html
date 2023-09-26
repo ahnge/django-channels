@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% block content %}
     <div class="container">
-        <form method="post" action="{% url "ttt:login" %}">
+        <form method="post" action="{% url "login" %}">
             {% csrf_token %}
             {{ form.as_p }}
             <button type="submit">Login</button>
