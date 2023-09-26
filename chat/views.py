@@ -4,6 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login, authenticate, logout
 
 from .forms import CustomUserCreationForm
+from .models import Room
 
 
 def register_view(request):
@@ -47,3 +48,24 @@ def login_view(request):
 def logout_view(request):
     logout(request)
     return redirect("ttt:login")
+
+
+def index_view(request):
+    return render(
+        request,
+        "chat/index.html",
+        {
+            "rooms": Room.objects.all(),
+        },
+    )
+
+
+def room_view(request, room_name):
+    chat_room, created = Room.objects.get_or_create(name=room_name)
+    return render(
+        request,
+        "chat/room.html",
+        {
+            "room": chat_room,
+        },
+    )

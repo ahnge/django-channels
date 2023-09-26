@@ -25,6 +25,6 @@ class HomeView(TemplateView):
 
 urlpatterns = [
     path("", HomeView.as_view()),
-    path("tictactoe/", include("tictactoe.urls")),
+    path("chat/", include("chat.urls")),
     path("admin/", admin.site.urls),
 ]
